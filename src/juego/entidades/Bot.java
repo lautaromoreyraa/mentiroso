@@ -25,6 +25,16 @@ public class Bot extends Personaje {
         return true;
     }
 
+    @Override
+    public boolean listoParaAfirmar() {
+        return true;
+    }
+
+    @Override
+    public boolean listoParaJuzgar() {
+        return true;
+    }
+
     // Afirma según su rol: miente o cuenta algo que sabe
     @Override
     public Hecho afirmar(Lista<String> otros, Random azar) {

@@ -135,7 +135,7 @@ public class PruebaPersonajes {
         Jugador vos = new Jugador("Eva", f, new Sincero());
         vos.setPalabra(Palabra.MENTIROSO);
         c.comprobar("el humano dice lo que eligió", vos.juzgar(dudosa), Palabra.MENTIROSO);
-        c.comprobar("la elección se consume", !vos.tienePalabra());
+        c.comprobar("la elección se consume", !vos.listoParaJuzgar());
         c.esperarExcepcion("juzgar sin haber elegido", IllegalStateException.class, () -> vos.juzgar(dudosa));
     }
 

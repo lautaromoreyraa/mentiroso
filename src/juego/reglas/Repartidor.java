@@ -62,8 +62,8 @@ public class Repartidor {
         return mezclados;
     }
 
-    // La mesa completa: un humano en el asiento indicado y bots en el resto
-    public Lista<Personaje> repartirPersonajes(Lista<String> nombres, int asientoHumano) {
+    // La mesa completa: un humano en el asiento indicado, bots en el resto y un primer turno al azar
+    public Mesa armarMesa(Lista<String> nombres, int asientoHumano) {
         if (nombres == null || nombres.tamanio() != JUGADORES) {
             throw new IllegalArgumentException("la mesa es de " + JUGADORES + " jugadores");
         }
@@ -73,10 +73,12 @@ public class Repartidor {
         Lista<Ficha> fichas = repartirFichas(JUGADORES);
         Lista<Rol> roles = repartirRoles();
         Lista<Personaje> personajes = new ListaDoble<>();
+        Jugador humano = null;
         for (int i = 0; i < JUGADORES; i++) {
             String nombre = nombres.obtener(i);
             if (i == asientoHumano) {
-                personajes.agregar(new Jugador(nombre, fichas.obtener(i), roles.obtener(i)));
+                humano = new Jugador(nombre, fichas.obtener(i), roles.obtener(i));
+                personajes.agregar(humano);
             } else {
                 personajes.agregar(new Bot(nombre, fichas.obtener(i), roles.obtener(i)));
             }
@@ -84,7 +86,11 @@ public class Repartidor {
         for (int i = 0; i < JUGADORES; i++) {
             darHechosPrivados(personajes.obtener(i), personajes);
         }
-        return personajes;
+        return new Mesa(personajes, humano, azar.nextInt(JUGADORES));
+    }
+
+    public Lista<Personaje> repartirPersonajes(Lista<String> nombres, int asientoHumano) {
+        return armarMesa(nombres, asientoHumano).getPersonajes();
     }
 
     // Cada uno arranca sabiendo algo de otros

@@ -40,6 +40,10 @@ public abstract class Personaje {
     // Decisiones: cada subclase decide a su manera
     public abstract boolean decideSolo();
 
+    public abstract boolean listoParaAfirmar();
+
+    public abstract boolean listoParaJuzgar();
+
     public abstract Hecho afirmar(Lista<String> otros, Random azar);
 
     public abstract Palabra juzgar(Sospecha sospecha);

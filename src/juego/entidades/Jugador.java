@@ -38,11 +38,13 @@ public class Jugador extends Personaje {
         this.palabraElegida = elegida;
     }
 
-    public boolean tieneAfirmacion() {
+    @Override
+    public boolean listoParaAfirmar() {
         return afirmacionElegida != null;
     }
 
-    public boolean tienePalabra() {
+    @Override
+    public boolean listoParaJuzgar() {
         return palabraElegida != null;
     }
 
