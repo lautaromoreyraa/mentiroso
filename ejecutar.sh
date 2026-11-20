@@ -1,2 +1,2 @@
 #!/bin/sh
-java -cp out "${1:-demo.Main}"
+java -cp out "${1:-juego.pantallas.Main}"

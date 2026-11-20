@@ -1,6 +1,6 @@
 @echo off
 if "%~1"=="" (
-    java -cp out demo.Main
+    java -cp out juego.pantallas.Main
 ) else (
     java -cp out %1
 )
