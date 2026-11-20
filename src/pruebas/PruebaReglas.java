@@ -59,7 +59,7 @@ public class PruebaReglas {
         Mesa m1 = mesaFija(0);
         Resultado colada = resultado(m1, false, Palabra.TE_CREO);
         Puntuacion.aplicar(colada, m1);
-        c.comprobar("mentira colada: +2 y +1 de bonus de Mentiroso", m1.buscar("Ana").getPuntaje(), 3);
+        c.comprobar("mentira colada: +2 y +2 de bonus de Mentiroso", m1.buscar("Ana").getPuntaje(), 4);
 
         Mesa m2 = mesaFija(0);
         Puntuacion.aplicar(resultado(m2, false, Palabra.MENTIROSO), m2);

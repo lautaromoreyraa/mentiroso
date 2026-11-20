@@ -180,6 +180,15 @@ public abstract class Personaje {
         return false;
     }
 
+    public boolean contradiceLoPublico(Hecho afirmado) {
+        for (Hecho h : publicos) {
+            if (h.esSobre(afirmado.getSujeto(), afirmado.getRasgo()) && !h.getValor().equals(afirmado.getValor())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Lista<Hecho> hechosSobre(Lista<String> sujetos) {
         Lista<Hecho> salida = new ListaDoble<>();
         for (Hecho h : privados) {

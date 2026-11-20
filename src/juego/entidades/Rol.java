@@ -18,6 +18,10 @@ public abstract class Rol {
 
     public abstract double probabilidadDeGesto();
 
+    public double astucia() {
+        return 0.0;
+    }
+
     public boolean mentiraAceptable(Personaje quien, Hecho mentira) {
         return true;
     }
