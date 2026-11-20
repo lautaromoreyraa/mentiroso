@@ -32,6 +32,7 @@ public class PruebaReglas {
         revelacion(c);
         partidasSimuladas(c);
         minimapaSinSpoilers(c);
+        adivinanzaYFinSinVidas(c);
 
         c.terminar();
     }
@@ -160,6 +161,23 @@ public class PruebaReglas {
             }
         }
         c.comprobar("hubo un turno para probar el minimapa", probado);
+    }
+
+    // +2 por rol adivinado, y la partida termina cuando el humano se queda sin vidas
+    private static void adivinanzaYFinSinVidas(Comprobador c) {
+        Mesa mesa = mesaFija(0);
+        Partida partida = new Partida(mesa, new Random(1));
+        c.comprobar("adivinar bien un rol", partida.puntuarAdivinanza(mesa.buscar("Ana"), new Mentiroso()));
+        c.comprobar("adivinar mal un rol", !partida.puntuarAdivinanza(mesa.buscar("Bruno"), new Sincero()));
+        c.comprobar("sólo el acierto suma " + Puntuacion.ROL_ADIVINADO, mesa.getHumano().getPuntaje(),
+                Puntuacion.ROL_ADIVINADO);
+        c.esperarExcepcion("adivinar el rol propio", IllegalArgumentException.class,
+                () -> partida.puntuarAdivinanza(mesa.getHumano(), new Sincero()));
+
+        mesa.getHumano().setVidas(0);
+        partida.avanzar();
+        c.comprobar("sin vidas del humano la partida termina", partida.estaTerminada());
+        c.comprobar("sin haber hecho ninguna afirmación", partida.getAfirmacionesHechas(), 0);
     }
 
     // Ayudas
