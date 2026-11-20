@@ -135,7 +135,7 @@ public class PruebaPersonajes {
         Jugador vos = new Jugador("Eva", f, new Sincero());
         vos.setPalabra(Palabra.MENTIROSO);
         c.comprobar("el humano dice lo que eligió", vos.juzgar(dudosa), Palabra.MENTIROSO);
-        c.comprobar("la elección se consume", !vos.tienePalabra());
+        c.comprobar("la elección se consume", !vos.listoParaJuzgar());
         c.esperarExcepcion("juzgar sin haber elegido", IllegalStateException.class, () -> vos.juzgar(dudosa));
     }
 
@@ -144,7 +144,7 @@ public class PruebaPersonajes {
         Afirmacion mentira = new Afirmacion("Ana", "Bruno", Rasgo.MASCOTA, "un loro", false);
         Resultado colada = new Resultado(mentira, false);
         colada.registrar("Carla", Palabra.TE_CREO);
-        c.comprobar("Mentiroso: mentira colada", new Mentiroso().bonificar(colada, "Ana"), 1);
+        c.comprobar("Mentiroso: mentira colada", new Mentiroso().bonificar(colada, "Ana"), 2);
         c.comprobar("Analítico: creer una mentira no suma", new Analitico().bonificar(colada, "Carla"), 0);
 
         Resultado pescada = new Resultado(mentira, false);
@@ -157,8 +157,14 @@ public class PruebaPersonajes {
 
         Resultado verdad = new Resultado(new Afirmacion("Ana", "Bruno", Rasgo.MASCOTA, "un perro", false), true);
         verdad.registrar("Carla", Palabra.TE_CREO);
-        c.comprobar("Analítico: creer una verdad suma", new Analitico().bonificar(verdad, "Carla"), 1);
+        c.comprobar("Analítico: creer una verdad sin discusión no suma", new Analitico().bonificar(verdad, "Carla"), 0);
         c.comprobar("Sincero: creer una verdad no suma", new Sincero().bonificar(verdad, "Carla"), 0);
+
+        Resultado discutida = new Resultado(verdad.getAfirmacion(), true);
+        discutida.registrar("Carla", Palabra.TE_CREO);
+        discutida.registrar("Dante", Palabra.MENTIROSO);
+        c.comprobar("Analítico: defender una verdad acusada suma", new Analitico().bonificar(discutida, "Carla"), 1);
+        c.comprobar("Analítico: acusar una verdad no suma", new Analitico().bonificar(discutida, "Dante"), 0);
     }
 
     // Setters y constructores que validan

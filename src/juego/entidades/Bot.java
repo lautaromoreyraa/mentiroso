@@ -25,6 +25,16 @@ public class Bot extends Personaje {
         return true;
     }
 
+    @Override
+    public boolean listoParaAfirmar() {
+        return true;
+    }
+
+    @Override
+    public boolean listoParaJuzgar() {
+        return true;
+    }
+
     // Afirma según su rol: miente o cuenta algo que sabe
     @Override
     public Hecho afirmar(Lista<String> otros, Random azar) {
@@ -49,13 +59,14 @@ public class Bot extends Personaje {
         return sospecha.probabilidadDeMentira() >= getRol().umbralDeAcusacion() ? Palabra.MENTIROSO : Palabra.TE_CREO;
     }
 
-    // Una mentira: un valor que sabe falso, o uno inventado si no sabe nada
+    // Una mentira: con astucia, le adjudica a otro un valor propio, que sólo él sabe falso
     private Hecho inventarMentira(Lista<String> otros, Random azar) {
         for (int intento = 0; intento < INTENTOS_DE_MENTIRA; intento++) {
             String objetivo = otros.obtener(azar.nextInt(otros.tamanio()));
             Rasgo rasgo = Rasgo.todos().obtener(azar.nextInt(Rasgo.todos().tamanio()));
             Hecho sabido = recuerda(objetivo, rasgo);
-            String valor = rasgo.valor(azar.nextInt(rasgo.cantidadDeValores()));
+            String valor = azar.nextDouble() < getRol().astucia() ? getFicha().valor(rasgo)
+                    : rasgo.valor(azar.nextInt(rasgo.cantidadDeValores()));
             if (sabido != null && sabido.getValor().equals(valor)) {
                 continue;
             }

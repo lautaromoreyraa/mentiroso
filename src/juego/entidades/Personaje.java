@@ -40,6 +40,10 @@ public abstract class Personaje {
     // Decisiones: cada subclase decide a su manera
     public abstract boolean decideSolo();
 
+    public abstract boolean listoParaAfirmar();
+
+    public abstract boolean listoParaJuzgar();
+
     public abstract Hecho afirmar(Lista<String> otros, Random azar);
 
     public abstract Palabra juzgar(Sospecha sospecha);
@@ -170,6 +174,15 @@ public abstract class Personaje {
                 return true;
             }
             if (h.getRasgo() == afirmado.getRasgo() && h.getValor().equals(afirmado.getValor())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean contradiceLoPublico(Hecho afirmado) {
+        for (Hecho h : publicos) {
+            if (h.esSobre(afirmado.getSujeto(), afirmado.getRasgo()) && !h.getValor().equals(afirmado.getValor())) {
                 return true;
             }
         }

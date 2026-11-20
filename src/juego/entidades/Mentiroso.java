@@ -1,5 +1,6 @@
 package juego.entidades;
 
+import juego.modelo.Hecho;
 import juego.modelo.Resultado;
 
 public class Mentiroso extends Rol {
@@ -18,12 +19,22 @@ public class Mentiroso extends Rol {
     // Afirma: miente seguido y disimula poco
     @Override
     public double probabilidadDeMentir() {
-        return 0.75;
+        return 0.60;
     }
 
     @Override
     public double probabilidadDeGesto() {
         return 0.30;
+    }
+
+    @Override
+    public double astucia() {
+        return 0.50;
+    }
+
+    @Override
+    public boolean mentiraAceptable(Personaje quien, Hecho mentira) {
+        return !quien.contradiceLoPublico(mentira);
     }
 
     // Juzga: acusa con poca evidencia, para sembrar caos
@@ -36,6 +47,6 @@ public class Mentiroso extends Rol {
     @Override
     public int bonificar(Resultado resultado, String nombre) {
         boolean colada = resultado.esHablante(nombre) && !resultado.eraVerdad() && !resultado.huboAcusacion();
-        return colada ? 1 : 0;
+        return colada ? 2 : 0;
     }
 }

@@ -13,7 +13,7 @@ public class Analitico extends Rol {
 
     @Override
     public String getObjetivo() {
-        return "Leé la mesa: cada juicio acertado, crea o acuse, suma un punto extra.";
+        return "Leé la mesa: cuando alguien acusa, acertar tu juicio, crea o acuse, suma un punto extra.";
     }
 
     // Afirma: miente poco y sólo donde no lo pueden deducir
@@ -28,6 +28,11 @@ public class Analitico extends Rol {
     }
 
     @Override
+    public double astucia() {
+        return 0.90;
+    }
+
+    @Override
     public boolean mentiraAceptable(Personaje quien, Hecho mentira) {
         return !quien.esDeduciblePublicamente(mentira);
     }
@@ -38,9 +43,9 @@ public class Analitico extends Rol {
         return 0.65;
     }
 
-    // Bonus: cualquier juicio acertado
+    // Bonus: juicio acertado en una afirmación discutida
     @Override
     public int bonificar(Resultado resultado, String nombre) {
-        return resultado.acerto(nombre) ? 1 : 0;
+        return resultado.acerto(nombre) && resultado.huboAcusacion() ? 1 : 0;
     }
 }
