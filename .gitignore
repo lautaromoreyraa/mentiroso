@@ -3,3 +3,11 @@ fuentes.txt
 *.class
 .idea/
 *.iml
+
+plan.md
+CLAUDE.md
+AGENTS.md
+MEMORY.md
+.claude/
+*.md
+!README.md
