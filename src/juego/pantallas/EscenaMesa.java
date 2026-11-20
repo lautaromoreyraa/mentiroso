@@ -2,6 +2,7 @@ package juego.pantallas;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import juego.entidades.Personaje;
 import juego.reglas.Partida;
 import motor.Entrada;
 import motor.Escena;
@@ -16,6 +17,8 @@ public class EscenaMesa extends Escena {
 
     // Atributos
     private final Partida partida;
+    private final MinimapaArbol minimapa;
+    private Personaje seleccionado;
     private double espera = PAUSA_INICIAL;
 
     // Constructor
@@ -24,6 +27,8 @@ public class EscenaMesa extends Escena {
             throw new IllegalArgumentException("la escena necesita una partida");
         }
         this.partida = partida;
+        this.minimapa = new MinimapaArbol(new VistaArbol(partida.getArbol().getArbol()));
+        this.seleccionado = partida.getMesa().getHumano();
     }
 
     // Al volver de afirmar o de investigar, la partida sigue enseguida
@@ -39,6 +44,7 @@ public class EscenaMesa extends Escena {
             getContexto().irA(new EscenaMenu());
             return;
         }
+        elegirPersonaje(entrada);
         boolean apurar = entrada.fuePresionada(KeyEvent.VK_SPACE) || entrada.fuePresionada(KeyEvent.VK_ENTER);
 
         if (partida.estaTerminada()) {
@@ -69,6 +75,26 @@ public class EscenaMesa extends Escena {
         avanzarPartida();
     }
 
+    // A quién muestra el minimapa: teclas 1 a 5, TAB o click en su asiento
+    private void elegirPersonaje(Entrada entrada) {
+        int cantidad = partida.getMesa().cantidad();
+        for (int i = 0; i < cantidad; i++) {
+            if (entrada.fuePresionada(KeyEvent.VK_1 + i)) {
+                seleccionado = partida.getMesa().buscar(i);
+            }
+        }
+        if (entrada.fuePresionada(KeyEvent.VK_TAB)) {
+            int siguiente = (partida.getMesa().asientoDe(seleccionado) + 1) % cantidad;
+            seleccionado = partida.getMesa().buscar(siguiente);
+        }
+        if (entrada.huboClick()) {
+            int asiento = VistaMesa.asientoEn(entrada.getMouseX(), entrada.getMouseY());
+            if (asiento >= 0) {
+                seleccionado = partida.getMesa().buscar(asiento);
+            }
+        }
+    }
+
     // Un paso de la partida y la pausa que le corresponde
     private void avanzarPartida() {
         partida.avanzar();
@@ -94,7 +120,8 @@ public class EscenaMesa extends Escena {
         g.fillRect(0, 0, ancho, alto);
 
         Hud.dibujar(g, partida, alto - 52);
-        VistaMesa.dibujar(g, partida, null);
+        VistaMesa.dibujar(g, partida, seleccionado);
+        minimapa.dibujar(g, partida, seleccionado);
 
         if (partida.estaTerminada()) {
             String motivo = partida.getMesa().getHumano().estaEnJuego() ? "Se terminaron las afirmaciones."
