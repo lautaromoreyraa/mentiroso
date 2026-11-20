@@ -6,22 +6,24 @@ import estructuras.ListaDoble;
 public enum Rasgo {
 
     // Los cuatro rasgos de una ficha, con sus cinco valores
-    MASCOTA("mascota", "tiene", "un perro", "un gato", "un loro", "un pez", "una tortuga"),
-    DEPORTE("deporte", "juega al", "fútbol", "básquet", "vóley", "tenis", "pádel"),
-    COMIDA("comida", "ama", "la pizza", "las empanadas", "el asado", "el sushi", "los tacos"),
-    CIUDAD("ciudad", "vive en", "Resistencia", "Corrientes", "Rosario", "Córdoba", "Salta");
+    MASCOTA("mascota", "la", "tiene", "un perro", "un gato", "un loro", "un pez", "una tortuga"),
+    DEPORTE("deporte", "el", "juega al", "fútbol", "básquet", "vóley", "tenis", "pádel"),
+    COMIDA("comida", "la", "ama", "la pizza", "las empanadas", "el asado", "el sushi", "los tacos"),
+    CIUDAD("ciudad", "la", "vive en", "Resistencia", "Corrientes", "Rosario", "Córdoba", "Salta");
 
     // Constantes
     public static final int VALORES_POR_RASGO = 5;
 
     // Atributos
     private final String nombre;
+    private final String articulo;
     private final String verbo;
     private final ListaDoble<String> valores = new ListaDoble<>();
 
     // Constructor
-    Rasgo(String nombre, String verbo, String v1, String v2, String v3, String v4, String v5) {
+    Rasgo(String nombre, String articulo, String verbo, String v1, String v2, String v3, String v4, String v5) {
         this.nombre = nombre;
+        this.articulo = articulo;
         this.verbo = verbo;
         valores.agregar(v1);
         valores.agregar(v2);
@@ -33,6 +35,10 @@ public enum Rasgo {
     // Consultas
     public String getNombre() {
         return nombre;
+    }
+
+    public String conArticulo() {
+        return articulo + " " + nombre;
     }
 
     public String getVerbo() {
